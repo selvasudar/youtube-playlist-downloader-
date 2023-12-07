@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 
 function App() {
   const [playlistUrl, setPlaylistUrl] = useState('');
+  const [downloadLinks, setDownloadLinks] = useState([]);
 
   const handleDownload = async (e) => {
     e.preventDefault();
@@ -18,6 +19,13 @@ function App() {
 
       const result = await response.json();
       console.log(result);
+      if (response.ok) {
+        // If the response is successful, update the download links state
+        setDownloadLinks(result.video_paths);
+      } else {
+        // Handle error responses
+        console.error('Error downloading playlist:', result.error);
+      }
     } catch (error) {
       console.error('Error downloading playlist:', error);
     }
@@ -37,6 +45,20 @@ function App() {
         />
         <button type="button" className='btn btn-primary mt-2' onClick={handleDownload}>Download Playlist</button>
       </div>
+      {downloadLinks.length > 0 && (
+        <div>
+          <h2>Download Links:</h2>
+          <ul>
+            {downloadLinks.map((link, index) => (
+              <li key={index}>
+                <a href={link} download>
+                  Video {index + 1}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
     </div>
   );
 }
