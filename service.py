@@ -18,7 +18,7 @@ def download_playlist():
     video_paths = []
 
     for video in playlist.videos:
-        video_path = os.path.join(output_path, video.title + '.mp4')
+        video_path = os.path.join(video.title + '.mp4')
         video.streams.get_highest_resolution().download(output_path)
         video_paths.append(video_path)
     
